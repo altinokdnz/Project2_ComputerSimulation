@@ -1,10 +1,11 @@
+#WELCOME TO TARIK AND DENIZ'S CAR MANUFACTURY SYSTEM SIMULATION
 import simpy
 import random
 import pandas as pd
-
+#helloo this is our second project 
 # Set random seed for reproducibility
 random.seed(42)
-
+#here is the machine that is defined through the having processes and its features
 class Machine:
     def __init__(self, env, name, process_time, fail_rate, repair_time):
         self.env = env
@@ -14,7 +15,7 @@ class Machine:
         self.repair_time = repair_time
         self.machine = simpy.Resource(env, capacity=1)
         self.broken = False
-
+#this definition is for the start and finish
     def process(self, part):
         with self.machine.request() as request:
             yield request
@@ -28,7 +29,7 @@ class Machine:
                 yield self.env.timeout(self.repair_time)
                 self.broken = False
                 print(f'{self.name} was repaired at {self.env.now}')
-
+#this part is for whole manufacturing system features such as raw material, machining, assembly, quality and package
 class ManufacturingSystem:
     def __init__(self, env):
         self.env = env
@@ -37,7 +38,7 @@ class ManufacturingSystem:
         self.assembly = Machine(env, 'Assembly', 7, 0.01, 5)
         self.quality_control = Machine(env, 'Quality Control', 3, 0.005, 3)
         self.packaging = Machine(env, 'Packaging', 4, 0.005, 2)
-
+# here is the place all manufacturing system processes occur
     def process_part(self, part_id):
         yield self.env.process(self.raw_material_handling.process(part_id))
         yield self.env.process(self.machining.process(part_id))
@@ -45,26 +46,28 @@ class ManufacturingSystem:
         yield self.env.process(self.quality_control.process(part_id))
         yield self.env.process(self.packaging.process(part_id))
         print(f'Part {part_id} finished at {self.env.now}')
-
+#this is to show how many times we did that process. Like a counter we called part
 def part_generator(env, system, interarrival_time):
     part_id = 1
     while True:
         yield env.timeout(interarrival_time)
         env.process(system.process_part(part_id))
         part_id += 1
-
+#here to run the simulation, there is simulation time and this simulation will be go untill it ends. 
 def run_simulation(simulation_time, interarrival_time):
     env = simpy.Environment()
     system = ManufacturingSystem(env)
     env.process(part_generator(env, system, interarrival_time))
     env.run(until=simulation_time)
 
-# Parameters for single product simulation
+# we decided to have simulation of 100. Between arrivals, we decided 8. 
 simulation_time = 100  # Total time to run the simulation
 interarrival_time = 8  # Time between arrivals of new parts
 
+#run the simulation 
 run_simulation(simulation_time, interarrival_time)
 
+#here is the experiments and analyzes that we decided.
 def experiment_and_analyze(simulation_times, interarrival_times):
     results = []
 
@@ -88,10 +91,10 @@ def experiment_and_analyze(simulation_times, interarrival_times):
 # Example experiment parameters
 simulation_times = [100, 200, 300]
 interarrival_times = [6, 8, 10]
-
+#resultss
 results_df = experiment_and_analyze(simulation_times, interarrival_times)
 print(results_df)
-
+#this is the multi product machine class that works together
 class MultiProductMachine(Machine):
     def __init__(self, env, name, process_times, fail_rate, repair_time):
         super().__init__(env, name, process_times[0], fail_rate, repair_time)
@@ -112,7 +115,7 @@ class MultiProductMachine(Machine):
                 yield self.env.timeout(self.repair_time)
                 self.broken = False
                 print(f'{self.name} was repaired at {self.env.now}')
-
+#we define all multiple product manufacturing system tools, processes (all raw material, machining, assembly, quality and packaging.)
 class MultiProductManufacturingSystem:
     def __init__(self, env):
         self.env = env
@@ -129,6 +132,7 @@ class MultiProductManufacturingSystem:
         yield self.env.process(self.quality_control.process(part_id))
         yield self.env.process(self.packaging.process(part_id))
         print(f'Part {part_id} finished at {self.env.now}')
+#here is the counting that is called part generator, it choosee random processes and add 1 more to the generator
 
 def multi_product_part_generator(env, system, interarrival_time, product_types):
     part_id = 1
@@ -138,7 +142,7 @@ def multi_product_part_generator(env, system, interarrival_time, product_types):
         part_name = f'{product_type}_{part_id}'
         env.process(system.process_part(part_name))
         part_id += 1
-
+# here is the running simulation that for the multiple machines. 
 def run_multi_product_simulation(simulation_time, interarrival_time, product_types):
     env = simpy.Environment()
     system = MultiProductManufacturingSystem(env)
@@ -149,5 +153,7 @@ def run_multi_product_simulation(simulation_time, interarrival_time, product_typ
 simulation_time = 100  # Total time to run the simulation
 interarrival_time = 8  # Time between arrivals of new parts
 product_types = [0, 1]  # Product types 0 and 1
-
+#runn the simulation 
 run_multi_product_simulation(simulation_time, interarrival_time, product_types)
+
+#we had fun during the simulation of the products manufacturing. I hope that it fits what we get and imagined. 
