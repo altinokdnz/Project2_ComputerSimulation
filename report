@@ -1,0 +1,52 @@
+Project Report: Automotive Parts Production Line Simulation
+1. Project Summary
+This project aims to develop a discrete event simulation of a high-volume automotive parts production line. Initially, the focus was on a single product line to simplify development. Additionally, as a bonus objective, it is envisaged to expand the simulation to address multiple product types, each with unique production requirements.
+
+2. System Description
+The production line is divided into several stages such as raw material handling, machining, assembly, quality control and packaging. Each stage involves specific machinery and labor requirements and operates in multiple shifts.
+
+3. Purposes
+Optimizing efficiency for a single product line.
+Identifying and easing production bottlenecks.
+Analyzing the effects of operational variables through scenario analysis.
+Bonus Goal: Extend the simulation to consider multiple product types and analyze additional complexity and resource allocation challenges.
+4. Tools Used and Programming Requirements
+The Python programming language was used to develop core functionalities for discrete event simulation, such as event scheduling, time progression, and status updates.
+
+5. Detailed Instructions
+5.1 System Modeling
+We defined raw materials, intermediate parts and finished products. We detailed operations such as loading, processing, assembly, control and packaging for each stage in the production line. We modeled the resources as machines and operators.
+
+5.2 Data Requirements
+We determined estimated processing times, raw material input frequency, machine failure rates and maintenance times for machinery and operations. We programmed shift patterns and worker allocations.
+
+5.3 Simulation Application
+We have developed a system to manage events such as start and end processes. We implemented a clock mechanism to advance the simulation clock to the next event. We allowed users to change input variables such as number of machines and shift timing.
+
+5.4 Experiment and Analysis
+We determined baseline performance by running key scenarios focusing on a single product type. We adjusted key variables to observe efficiency and bottlenecks. We collected data, analyzed performance and made recommendations.
+
+5.5 Bonus Objective: Multi-Product Expansion
+We introduced different types of products and parts. We added events for machine setting changes and product specific redirects. We explored the effects of producing multiple types of products on system efficiency and resource usage.
+
+6. Simulation Codes
+Python script that contains all the functions described. You can get the all code in Python file (main.py) . 
+7. Results and Analysis
+7.1 Single Product Line Simulation Results
+In the single product line simulation, the start and end times of each production stage, machine malfunctions and repair times were observed. Efficiency analysis was conducted and bottlenecks were identified. For example, the number of parts completed in a certain period of time is obtained.
+7.2 Experiment and Analysis
+The results of the experiments for different simulation and interface times are may shown with running the simulation. 
+These results were used to understand how different input variables affect system performance. For example, it has been observed that shorter interarrival times (time between parts) result in more completed parts.
+
+7.3 Multiple Product Line Simulation Results
+In the simulation for multiple product types, the start and end times of operations, machine malfunctions and repair times for each product type were observed. Processes and machine setting changes specific to product types have been successfully modeled.
+
+
+8. Conclusion and Recommendations
+This project demonstrated how an automotive parts production line can be modeled and analyzed using discrete event simulation. Simulations for single product lines and multiple product types provided valuable information to optimize the efficiency of the system and identify bottlenecks.
+
+Suggestions:
+
+To increase the efficiency of the production line, key parameters such as the number of machines and processing times must be optimized.
+In the production of multiple product types, resource allocation should be made taking into account the processes and adjustment times specific to the product type.
+Future work may include expanding the simulation to include more complex production systems and more product types.
