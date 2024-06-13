@@ -157,3 +157,52 @@ product_types = [0, 1]  # Product types 0 and 1
 run_multi_product_simulation(simulation_time, interarrival_time, product_types)
 
 #we had fun during the simulation of the products manufacturing. I hope that it fits what we get and imagined. 
+
+            if random.random() < self.fail_rate:
+                self.broken = True
+                print(f'{self.name} broke down at {self.env.now}')
+                yield self.env.timeout(self.repair_time)
+                self.broken = False
+                print(f'{self.name} was repaired at {self.env.now}')
+#we define all multiple product manufacturing system tools, processes (all raw material, machining, assembly, quality and packaging.)
+class MultiProductManufacturingSystem:
+    def __init__(self, env):
+        self.env = env
+        self.raw_material_handling = MultiProductMachine(env, 'Raw Material Handling', [5, 6], 0.01, 10)
+        self.machining = MultiProductMachine(env, 'Machining', [10, 12], 0.02, 15)
+        self.assembly = MultiProductMachine(env, 'Assembly', [7, 8], 0.01, 5)
+        self.quality_control = MultiProductMachine(env, 'Quality Control', [3, 4], 0.005, 3)
+        self.packaging = MultiProductMachine(env, 'Packaging', [4, 5], 0.005, 2)
+
+    def process_part(self, part_id):
+        yield self.env.process(self.raw_material_handling.process(part_id))
+        yield self.env.process(self.machining.process(part_id))
+        yield self.env.process(self.assembly.process(part_id))
+        yield self.env.process(self.quality_control.process(part_id))
+        yield self.env.process(self.packaging.process(part_id))
+        print(f'Part {part_id} finished at {self.env.now}')
+#here is the counting that is called part generator, it choosee random processes and add 1 more to the generator
+
+def multi_product_part_generator(env, system, interarrival_time, product_types):
+    part_id = 1
+    while True:
+        yield env.timeout(interarrival_time)
+        product_type = random.choice(product_types)
+        part_name = f'{product_type}_{part_id}'
+        env.process(system.process_part(part_name))
+        part_id += 1
+# here is the running simulation that for the multiple machines. 
+def run_multi_product_simulation(simulation_time, interarrival_time, product_types):
+    env = simpy.Environment()
+    system = MultiProductManufacturingSystem(env)
+    env.process(multi_product_part_generator(env, system, interarrival_time, product_types))
+    env.run(until=simulation_time)
+
+# Parameters for multi-product simulation
+simulation_time = 100  # Total time to run the simulation
+interarrival_time = 8  # Time between arrivals of new parts
+product_types = [0, 1]  # Product types 0 and 1
+#runn the simulation 
+run_multi_product_simulation(simulation_time, interarrival_time, product_types)
+
+#we had fun during the simulation of the products manufacturing. I hope that it fits what we get and imagined. 
